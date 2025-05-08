@@ -29,7 +29,15 @@ const fetchPosts = ( target ) => {
 		return;
 	}
 
-	const url = button.href;
+	//const url = button.href;
+	// David Lewis
+	const url = new URL( window.location.href );
+	url.searchParams.set(
+		button.dataset.queryUrl,
+		button.dataset.queryNextPage
+	);
+	// David Lewis
+	
 	const container = button
 		.closest( '.wp-block-query' )
 		?.querySelector( '.wp-block-post-template' );
@@ -40,7 +48,7 @@ const fetchPosts = ( target ) => {
 	}
 
 	const fetchUrl = new URL( url, window.location.origin );
-
+	
 	//Not allowed to fetch from other origin
 	if ( fetchUrl.origin !== window.location.origin ) {
 		return;
@@ -95,7 +103,6 @@ const fetchPosts = ( target ) => {
 			//update URL
 			if ( button.dataset.updateUrl ) {
 				const newUrl = new URL( window.location.href );
-
 				newUrl.searchParams.set(
 					button.dataset.queryUrl,
 					queryNextPage

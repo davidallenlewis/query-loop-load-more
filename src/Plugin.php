@@ -260,6 +260,13 @@ class Plugin {
 			: 'wp-block-button__link wp-element-button wp-load-more__button';
 		$pagination_arrow = 'none' !== $attributes['paginationArrow'] ? '<span class="wp-block-query-pagination__arrow">' . $arrow_map[ $attributes['paginationArrow'] ] . '</span>' : '';
 
+		// David Lewis
+		$other_parameters = '';
+		foreach ( $_GET as $key => $value ) {
+			$other_parameters.= '&' . $key . '=' . $value;
+		}
+		// David Lewis
+
 		$infinite_scroll_markup = '';
 		if ( $is_infinite ) {
 			$infinite_scroll_markup = '
@@ -275,16 +282,19 @@ class Plugin {
 
 			// Build list of load more links.
 			$block_content = sprintf(
-				'<a class="%1$s" href="?%2$s=%3$d" data-query-next-page="%3$d" data-query-key="%5$d" data-query-max-page="%6$d" data-query-url="%2$s" data-update-url="%7$s"><span class="qllm-loading">%4$s%9$s</span><span class="qllm-load-more">%8$s</span></a>',
-				$button_classes,
-				$page_parameter,
-				$page + 1,
-				$is_infinite ? '' : esc_html( $attributes['loadingText'] ),
-				$query_id,
-				$max_pages,
-				$is_update_url,
-				$is_infinite ? '' : esc_html( $attributes['loadMoreText'] ) . $pagination_arrow,
-				$infinite_scroll_markup
+				//'<a class="%1$s" href="?%2$s=%3$d" data-query-next-page="%3$d" data-query-key="%5$d" data-query-max-page="%6$d" data-query-url="%2$s" data-update-url="%7$s"><span class="qllm-loading">%4$s%9$s</span><span class="qllm-load-more">%8$s</span></a>',
+				// David Lewis
+				'<a class="%1$s" href="?%2$s=%3$d%10$s" data-query-next-page="%3$d" data-query-key="%5$d" data-query-max-page="%6$d" data-query-url="%2$s" data-filters="%10$s" data-update-url="%7$s"><span class="qllm-loading">%4$s%9$s</span><span class="qllm-load-more">%8$s</span></a>',
+				$button_classes, //1
+				$page_parameter, //2
+				$page + 1, //3
+				$is_infinite ? '' : esc_html( $attributes['loadingText'] ), //4
+				$query_id, //5
+				$max_pages, //6
+				$is_update_url, //7
+				$is_infinite ? '' : esc_html( $attributes['loadMoreText'] ) . $pagination_arrow, //8
+				$infinite_scroll_markup, //9
+				$other_parameters //10 David Lewis
 			);
 		} else {
 			//all posts loaded

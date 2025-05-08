@@ -113,7 +113,13 @@ const fetchPosts = target => {
   if (!button) {
     return;
   }
-  const url = button.href;
+
+  //const url = button.href;
+  // David Lewis
+  const url = new URL(window.location.href);
+  url.searchParams.set(button.dataset.queryUrl, button.dataset.queryNextPage);
+  // David Lewis
+
   const container = button.closest('.wp-block-query')?.querySelector('.wp-block-post-template');
 
   // return early if button is still loading or required data not found
