@@ -6,7 +6,7 @@
  * Version:                 1.0.12
  * Requires at least:       6.2
  * Tested up to:            6.7.2
- * Requires PHP:            8.0
+ * Requires PHP:            7.4
  * Author:                  WordPress.com Special Projects
  * Author URI:              https://wpspecialprojects.wordpress.com
  * License:                 GPLv3 or later
@@ -45,10 +45,11 @@ if ( ! is_file( WPCOMSP_QLLM_DIR_PATH . '/vendor/autoload.php' ) ) {
 require_once WPCOMSP_QLLM_DIR_PATH . '/vendor/autoload.php';
 
 // Bootstrap the plugin (maybe)!
-define( 'WPCOMSP_QLLM_REQUIREMENTS', wpcomsp_qllm_validate_requirements() );
-if ( is_wp_error( WPCOMSP_QLLM_REQUIREMENTS ) ) {
-	wpcomsp_qllm_output_requirements_error( WPCOMSP_QLLM_REQUIREMENTS );
+//define( 'WPCOMSP_QLLM_REQUIREMENTS', wpcomsp_qllm_validate_requirements() );
+$wpcomsp_qllm_requirements = wpcomsp_qllm_validate_requirements();
+if ( is_wp_error( $wpcomsp_qllm_requirements ) ) {
+    wpcomsp_qllm_output_requirements_error( $wpcomsp_qllm_requirements );
 } else {
-	require_once WPCOMSP_QLLM_DIR_PATH . '/functions.php';
-	add_action( 'plugins_loaded', array( wpcomsp_qllm_get_plugin_instance(), 'maybe_initialize' ) );
+    require_once WPCOMSP_QLLM_DIR_PATH . '/functions.php';
+    add_action( 'plugins_loaded', array( wpcomsp_qllm_get_plugin_instance(), 'maybe_initialize' ) );
 }

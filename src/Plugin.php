@@ -78,7 +78,8 @@ class Plugin {
 	 *
 	 * @return  void
 	 */
-	public function initialize(): void {
+	//public function initialize(): void {
+	public function initialize() {
 		add_filter( 'register_block_type_args', array( $this, 'block_meta' ), 10, 2 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'editor_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ) );
@@ -91,9 +92,8 @@ class Plugin {
 	 * @since   1.0.0
 	 * @version 1.0.0
 	 *
-	 * @return  true|\WP_Error
 	 */
-	public function is_active(): bool|\WP_Error {
+	public function is_active() {
 		return true;
 	}
 
@@ -105,7 +105,8 @@ class Plugin {
 	 *
 	 * @return  void
 	 */
-	public function maybe_initialize(): void {
+	//public function maybe_initialize(): void {
+	public function maybe_initialize() {
 		$is_active = $this->is_active();
 		if ( is_wp_error( $is_active ) ) {
 			wpcomsp_qllm_output_requirements_error( $is_active );
@@ -120,7 +121,8 @@ class Plugin {
 	 *
 	 * @return void
 	 */
-	public function assets(): void {
+	//public function assets(): void {
+	public function assets() {
 		$asset_meta = wpcomsp_qllm_get_asset_meta( WPCOMSP_QLLM_DIR_PATH . 'assets/js/build/frontend.js' );
 
 		wp_enqueue_style(
@@ -144,7 +146,8 @@ class Plugin {
 	 *
 	 * @return void
 	 */
-	public function editor_assets(): void {
+	//public function editor_assets(): void {
+	public function editor_assets() {
 		$deps = wpcomsp_qllm_get_asset_meta( WPCOMSP_QLLM_DIR_PATH . 'assets/js/build/index.js' );
 
 		wp_enqueue_style(

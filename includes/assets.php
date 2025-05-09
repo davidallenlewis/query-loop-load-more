@@ -15,29 +15,31 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return  array|null
  */
+
+//function wpcomsp_qllm_get_asset_meta( $asset_path, $extra_dependencies = null ) {
 function wpcomsp_qllm_get_asset_meta( string $asset_path, ?array $extra_dependencies = null ): ?array {
-	if ( ! file_exists( $asset_path ) || ! str_starts_with( $asset_path, WPCOMSP_QLLM_DIR_PATH ) ) {
-		return null;
-	}
+    if ( ! is_string( $asset_path ) || ! file_exists( $asset_path ) || 0 !== strpos( $asset_path, WPCOMSP_QLLM_DIR_PATH ) ) {
+        return null;
+    }
 
-	$asset_path_info = pathinfo( $asset_path );
-	if ( file_exists( $asset_path_info['dirname'] . '/' . $asset_path_info['filename'] . '.asset.php' ) ) {
-		$asset_meta  = require $asset_path_info['dirname'] . '/' . $asset_path_info['filename'] . '.asset.php';
-		$asset_meta += array( 'dependencies' => array() ); // Ensure 'dependencies' key exists.
-	} else {
-		$asset_meta = array(
-			'dependencies' => array(),
-			'version'      => filemtime( $asset_path ),
-		);
-		if ( false === $asset_meta['version'] ) { // Safeguard against filemtime() returning false.
-			$asset_meta['version'] = WPCOMSP_QLLM_METADATA['Version'];
-		}
-	}
+    $asset_path_info = pathinfo( $asset_path );
+    $asset_meta = null;
 
-	if ( is_array( $extra_dependencies ) ) {
-		$asset_meta['dependencies'] = array_merge( $asset_meta['dependencies'], $extra_dependencies );
-		$asset_meta['dependencies'] = array_unique( $asset_meta['dependencies'] );
-	}
+    if ( file_exists( $asset_path_info['dirname'] . '/' . $asset_path_info['filename'] . '.asset.php' ) ) {
+        $asset_meta = require $asset_path_info['dirname'] . '/' . $asset_path_info['filename'] . '.asset.php';
+        $asset_meta += array( 'dependencies' => array() ); // Ensure 'dependencies' key exists.
+    } else {
+        $version = filemtime( $asset_path );
+        $asset_meta = array(
+            'dependencies' => array(),
+            'version'      => $version !== false ? $version : WPCOMSP_QLLM_METADATA['Version'],
+        );
+    }
 
-	return $asset_meta;
+    if ( is_array( $extra_dependencies ) ) {
+        $asset_meta['dependencies'] = array_merge( $asset_meta['dependencies'], $extra_dependencies );
+        $asset_meta['dependencies'] = array_unique( $asset_meta['dependencies'] );
+    }
+
+    return $asset_meta;
 }

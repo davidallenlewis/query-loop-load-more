@@ -16,4 +16,5 @@ function wpcomsp_qllm_get_plugin_instance(): Plugin {
 	return Plugin::get_instance();
 }
 
-require WPCOMSP_QLLM_DIR_PATH . 'includes/assets.php';
+//require WPCOMSP_QLLM_DIR_PATH . 'includes/assets.php';
+require_once WPCOMSP_QLLM_DIR_PATH . 'includes/assets.php';

@@ -83,7 +83,7 @@ function wpcomsp_qllm_get_plugin_version(): string {
  *
  * @return  bool
  */
-function wpcomsp_qllm_is_wp_version_compatible( $min_wp_version ) {
+function wpcomsp_qllm_is_wp_version_compatible( string $min_wp_version ): bool {
 	if ( ! function_exists( 'is_wp_version_compatible' ) ) {
 		return false;
 	}
