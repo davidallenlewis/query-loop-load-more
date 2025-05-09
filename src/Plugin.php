@@ -263,12 +263,14 @@ class Plugin {
 			: 'wp-block-button__link wp-element-button wp-load-more__button';
 		$pagination_arrow = 'none' !== $attributes['paginationArrow'] ? '<span class="wp-block-query-pagination__arrow">' . $arrow_map[ $attributes['paginationArrow'] ] . '</span>' : '';
 
-		// David Lewis
-		$other_parameters = '';
-		foreach ( $_GET as $key => $value ) {
-			$other_parameters.= '&' . $key . '=' . $value;
-		}
-		// David Lewis
+		// Get the existing query params
+		$query_params = $_GET;	
+	
+		// Remove the page key from the query params
+		unset( $query_params[ $page_key ] );
+		
+		// Build list of other query params
+		$other_parameters = ! empty( $query_params ) ? '&' . http_build_query( $query_params ) : '' ;
 
 		$infinite_scroll_markup = '';
 		if ( $is_infinite ) {
@@ -285,8 +287,6 @@ class Plugin {
 
 			// Build list of load more links.
 			$block_content = sprintf(
-				//'<a class="%1$s" href="?%2$s=%3$d" data-query-next-page="%3$d" data-query-key="%5$d" data-query-max-page="%6$d" data-query-url="%2$s" data-update-url="%7$s"><span class="qllm-loading">%4$s%9$s</span><span class="qllm-load-more">%8$s</span></a>',
-				// David Lewis
 				'<a class="%1$s" href="?%2$s=%3$d%10$s" data-query-next-page="%3$d" data-query-key="%5$d" data-query-max-page="%6$d" data-query-url="%2$s" data-filters="%10$s" data-update-url="%7$s"><span class="qllm-loading">%4$s%9$s</span><span class="qllm-load-more">%8$s</span></a>',
 				$button_classes, //1
 				$page_parameter, //2
@@ -297,7 +297,7 @@ class Plugin {
 				$is_update_url, //7
 				$is_infinite ? '' : esc_html( $attributes['loadMoreText'] ) . $pagination_arrow, //8
 				$infinite_scroll_markup, //9
-				$other_parameters //10 David Lewis
+				$other_parameters //10
 			);
 		} else {
 			//all posts loaded
