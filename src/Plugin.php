@@ -247,13 +247,13 @@ class Plugin {
 			'arrow'   => '→',
 			'chevron' => '»',
 		);
-
+		
 		// Get query context for current page number and query Id.
-		$query_id         = (int) $block->context['queryId'] ?? 0;
+		$query_id         = (int) $block->context['queryId'] ? $block->context['queryId'] : 0;
 		$page_key         = isset( $block->context['queryId'] ) ? 'query-' . $query_id . '-page' : 'query-page';
-		$inherit          = $block->context['query']['inherit'] ?? false;
-		$is_infinite      = $attributes['infiniteScroll'] ?? false;
-		$is_update_url    = $attributes['updateUrl'] ?? false;
+		$inherit          = $block->context['query']['inherit'] ? $block->context['query']['inherit'] : false;
+		$is_infinite      = $attributes['infiniteScroll'] ? $attributes['infiniteScroll'] : false;
+		$is_update_url    = $attributes['updateUrl'] ? $attributes['updateUrl'] : false;
 		$page             = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$page_parameter   = $inherit ? 'paged' : $page_key;
 		$block_query      = $inherit ? $wp_query : new \WP_Query( build_query_vars_from_query_block( $block, $page ) );
